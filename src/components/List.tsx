@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
+import React, { SyntheticEvent, useContext, useEffect, useState, useRef } from "react";
 import { GlobeMethods } from "react-globe.gl";
 import { FormattedMessage } from "react-intl";
 import { LocaleContext } from "../i18n/LocaleContext";
@@ -39,7 +39,14 @@ function reorderGuesses(guesses: string[], graphicData: any, r_country: number, 
 
 }
 
-export default function List({ guesses, graphicData, r_country, countries, globeRef }: Props) {
+export default function List({
+  guesses,
+  graphicData,
+  r_country,
+  countries,
+  globeRef
+}: Props) {
+  const ref = useRef<HTMLDivElement>(null)
   const [orderedGuesses, setOrderedGuesses] = useState(
     reorderGuesses(guesses, graphicData, r_country, countries)
   );
@@ -62,6 +69,27 @@ export default function List({ guesses, graphicData, r_country, countries, globe
   useEffect(() => {
     setOrderedGuesses(reorderGuesses(guesses, graphicData, r_country, countries));
   }, [guesses, graphicData, r_country]);
+
+  useEffect(() => {
+    const clickListener = (e: MouseEvent) => {
+      const listEl = ref.current
+
+      if (listEl == null) return
+      if (showList === false) return
+
+      if (!listEl.contains(e.target as HTMLElement)) {
+        setShowList(false)
+      }
+    }
+
+    setTimeout(() => {
+      document.addEventListener('click', clickListener, { passive: true })
+    }, 0)
+
+    return () => {
+      document.removeEventListener('click', clickListener)
+    }
+  }, [showList])
 
   function formatKm(m: number, miles: boolean) {
     const METERS_PER_MILE = 1.60934;
@@ -119,52 +147,55 @@ export default function List({ guesses, graphicData, r_country, countries, globe
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
   if (!showList) {
-    return(
+    return (
       <div onClick={e => setShowList(!showList)} className={"word-list flex" + (isMobile ? " top-12 p-2 right-1 left-1" : " top-0.5 w-6/12 left-1/2 -translate-x-1/2")} style={!isMobile ? {maxWidth: '430px'} : {}}>
-      {guessesToDisplay.length === 0 ? <p className= "mx-auto dark:text-white">{localeList[locale]["GuessesFlags"]}</p> :
-      <div className="relative inline-block bottom-2 w-full pr-6">
-      <ul className="grid hide-list mt-0.5 justify-between">
+        {guessesToDisplay.length === 0 ? (
+          <p className= "mx-auto dark:text-white">{localeList[locale]["GuessesFlags"]}</p>
+        ) : (
+          <div className="relative inline-block bottom-2 w-full pr-6">
+            <ul className="grid hide-list mt-0.5 justify-between">
 
-        {guessesToDisplay.slice(0, 12).map((guess, idx) => {
-          var c_id = getFromName(guess.toLocaleLowerCase());
-          const { NAME_LEN, ABBREV, NAME, FLAG } = countries.features[c_id].properties;
+              {guessesToDisplay.slice(0, 12).map((guess, idx) => {
+                var c_id = getFromName(guess.toLocaleLowerCase());
+                const { NAME_LEN, ABBREV, NAME, FLAG } = countries.features[c_id].properties;
 
-          var flag = (FLAG || "").toLocaleLowerCase();
+                var flag = (FLAG || "").toLocaleLowerCase();
 
-          let name = NAME_LEN >= 10 ? ABBREV : NAME;
-          if (locale !== "en-CA") {
-            name = countries.features[c_id].properties[langName];
-          }
+                let name = NAME_LEN >= 10 ? ABBREV : NAME;
+                if (locale !== "en-CA") {
+                  name = countries.features[c_id].properties[langName];
+                }
 
-          return (
+                return (
 
-            <li className="flex items-center mb-4 mx-1" key={idx}>
-              <button
-                onClick={(e) => turnToCountry(e, guess)}
-                className="flex cursor-pointer"
-              >
-                <img
-                  src={`https://flagcdn.com/w20/${flag.toLowerCase()}.png`}
-                  alt={name}
-                  className="mt-1 w-6 py-1"
-                />
+                  <li className="flex items-center mb-4 mx-1" key={idx}>
+                    <button
+                      onClick={(e) => turnToCountry(e, guess)}
+                      className="flex cursor-pointer"
+                    >
+                      <img
+                        src={`https://flagcdn.com/w20/${flag.toLowerCase()}.png`}
+                        alt={name}
+                        className="mt-1 w-6 py-1"
+                      />
 
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-      </div>
-    }
-      <ChevronDownIcon
-      stroke="currentColor"
-      className="h-6 w-6 stroke-white absolute top-2 right-2" />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+        <ChevronDownIcon
+          stroke="currentColor"
+          className="h-6 w-6 stroke-white absolute top-2 right-2"
+        />
       </div>
     );
   }
 
   return (
-    <div className={"word-list z-10 expand-list select-none cursor-pointer" + (isMobile ? " top-12 p-2 right-1 left-1" : " top-0.5 w-3/12 left-1/2 -translate-x-1/2")} style={!isMobile ? {width: '440px'} : {}}>
+    <div ref={ref} className={"word-list z-10 expand-list select-none cursor-pointer" + (isMobile ? " top-12 p-2 right-1 left-1" : " top-0.5 w-3/12 left-1/2 -translate-x-1/2")} style={!isMobile ? {width: '440px'} : {}}>
 
       {orderedGuesses.length > 0 && (
 
@@ -236,9 +267,11 @@ export default function List({ guesses, graphicData, r_country, countries, globe
         </div>
       )}
 
-      <ChevronUpIcon onClick={e => setShowList(!showList)}
-      stroke="currentColor"
-      className="h-6 w-6 stroke-white close"/>
+      <ChevronUpIcon
+        onClick={e => setShowList(!showList)}
+        stroke="currentColor"
+        className="h-6 w-6 stroke-white close"
+      />
 
     </div>
   );
