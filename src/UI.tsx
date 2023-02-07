@@ -255,6 +255,7 @@ const UI = ({
       <InputField
         handleSubmit={handleSubmit}
         setMsg={[msg, setMsg]}
+        isHints={isHints}
         countries={countries}
       />
 

@@ -10,12 +10,14 @@ import Hints from './Hints';
 type Props = {
     handleSubmit: (value : string) => string;
     setMsg: (string | any)[];
+    isHints: boolean
     countries: { features: never[] }
 };
 
 const InputField = ({
   handleSubmit,
   setMsg,
+  isHints,
   countries
 } : Props) => {
   
@@ -28,7 +30,7 @@ const InputField = ({
     const hints = useMemo(() => {
       const hints: string[] = []
 
-      if (value !== '') {
+      if (isHints && value !== '') {
         for (let { properties } of countries.features) {
           const name = Reflect.get(properties, 'ADMIN') as string
   
@@ -39,7 +41,7 @@ const InputField = ({
       }
 
       return hints
-    }, [value, countries.features])
+    }, [value, countries.features, isHints])
 
     function exSubmit(e : any) {
       e.preventDefault();
@@ -133,7 +135,7 @@ const InputField = ({
         </Fade> : ''}
 
             <div className="absolute bottom-1 w-full">
-              <Hints formRef={formRef} hints={hints} onClickHint={onClickHint} />
+              {isHints && <Hints formRef={formRef} hints={hints} onClickHint={onClickHint} />}
 
               <form ref={formRef} className="mx-auto table relative bottom-1" onSubmit={e => exSubmit(e)}>
                 <span className='input' style={divStyle}>{value}</span>
