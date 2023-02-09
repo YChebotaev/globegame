@@ -57,5 +57,6 @@ export const Spanish: Messages = {
   Victory: "Victoria",
   Guesses: "Suposiciones",
   GuessesFlags: "",
-  Daily: "",
+  Daily: "Diario",
+  NextDailyIn: "Siguiente Entrada diaria {time}"
 };

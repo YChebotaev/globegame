@@ -1,9 +1,9 @@
 import {useContext} from 'react';
 
 import Dropdown from 'react-dropdown';
-import {LocaleContext} from "../i18n/LocaleContext";
+import { LocaleContext } from "../i18n/LocaleContext";
 import localeList from "../i18n/messages";
-import {useMediaQuery} from 'react-responsive';
+import { useMediaQuery } from 'react-responsive';
 
 import {
     ChartBarIcon,

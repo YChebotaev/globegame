@@ -58,4 +58,5 @@ export const English: Messages = {
   Guesses: "Guesses",
   GuessesFlags: "Your guesses will be here",
   Daily: "Daily",
+  NextDailyIn: "Next Daily in {time}"
 };

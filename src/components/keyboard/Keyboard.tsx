@@ -1,68 +1,102 @@
-import { useEffect } from 'react'
-import { BackspaceIcon } from '@heroicons/react/24/outline'
-import SpaceIcon from '../icons/SpaceIcon'
-import EnterIcon from '../icons/EnterIcon'
+import { useEffect, useRef } from "react";
+import { BackspaceIcon } from "@heroicons/react/24/outline";
+import SpaceIcon from "../icons/SpaceIcon";
+import EnterIcon from "../icons/EnterIcon";
+import keyboardList from '../../i18n/keyboards'
 
-import { Key } from './Key'
+import { Key } from "./Key";
 
-const DELETE_TEXT = <BackspaceIcon width={48} /> // 'Delete';
-const ENTER_TEXT = <EnterIcon /> // 'Enter';
-const SPACE_TEXT = <SpaceIcon /> // 'Space';
+const DELETE_TEXT = <BackspaceIcon width={48} />; // 'Delete';
+const ENTER_TEXT = <EnterIcon />; // 'Enter';
+const SPACE_TEXT = <SpaceIcon />; // 'Space';
 
 type Props = {
-  onChar: (value: string) => void
-  onDelete: () => void
-  onEnter: () => void
-  onSpace: () => void
-  isRevealing?: boolean
-}
+  locale: keyof typeof keyboardList
+  onChar: (value: string) => void;
+  onDelete: () => void;
+  onEnter: () => void;
+  onSpace: () => void;
+  isRevealing?: boolean;
+};
 
 export const Keyboard = ({
+  locale,
   onChar,
   onDelete,
   onEnter,
   onSpace,
   isRevealing,
 }: Props) => {
-
+  const deleteIntervalRef = useRef<NodeJS.Timer>()
   const onClick = (value: string) => {
-    if (value === 'ENTER') {
-      onEnter()
-    } else if (value === 'DELETE') {
-      onDelete()
-    } else if (value === 'Space') {
-      onSpace()
+    if (value === "ENTER") {
+      onEnter();
+    } else if (value === "DELETE") {
+      onDelete();
+    } else if (value === "Space") {
+      onSpace();
     } else {
-      onChar(value)
+      onChar(value);
     }
-  }
+  };
 
   useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
-      if (e.code === 'Enter') {
-        onEnter()
-      } else if (e.code === 'Backspace') {
-        onDelete()
-      } else if (e.code === 'Space') {
-        onSpace()
+    const keyUpListener = (e: KeyboardEvent) => {
+      if (e.code === "Enter") {
+        onEnter();
+      } else if (e.code === "Space") {
+        onSpace();
       } else {
-        const key = e.key.toUpperCase()
+        const key = e.key.toUpperCase();
         // TODO: check this test if the range works with non-english letters
-        if (key.length === 1 && key >= 'A' && key <= 'Z') {
-          onChar(key)
+        if (key.length === 1 && key >= "A" && key <= "Z") {
+          onChar(key);
         }
       }
-    }
-    window.addEventListener('keyup', listener)
+    };
+
+    const keyDownListener = (e: KeyboardEvent) => {
+      if (e.code === "Backspace") {
+        const i = setInterval(() => onDelete(), 300);
+
+        const keyUpListener = (e: KeyboardEvent) => {
+          if (e.code === "Backspace") {
+            clearInterval(i);
+            window.removeEventListener("keyup", keyUpListener);
+          }
+        };
+
+        window.addEventListener("keyup", keyUpListener, { passive: true });
+
+        onDelete();
+      }
+    };
+
+    window.addEventListener("keyup", keyUpListener, { passive: true });
+    window.addEventListener("keydown", keyDownListener, { passive: true });
+
     return () => {
-      window.removeEventListener('keyup', listener)
-    }
-  }, [onEnter, onDelete, onChar])
+      window.removeEventListener("keyup", keyUpListener);
+      window.removeEventListener("keydown", keyDownListener);
+    };
+  }, [onEnter, onDelete, onChar]);
+
+  function onStartDelete() {
+    const i = setInterval(() => onDelete(), 150)
+
+    Reflect.set(deleteIntervalRef, 'current', i)
+
+    onDelete()
+  }
+
+  function onEndDelete() {
+    clearInterval(deleteIntervalRef.current)
+  }
 
   return (
     <div>
       <div className="mb-1 flex justify-center">
-        {['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'].map((key) => (
+        {keyboardList[locale][0].map((key) => (
           <Key
             value={key}
             key={key}
@@ -73,7 +107,7 @@ export const Keyboard = ({
         ))}
       </div>
       <div className="mb-1 flex justify-center">
-        {['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'].map((key) => (
+        {keyboardList[locale][1].map((key) => (
           <Key
             value={key}
             key={key}
@@ -87,10 +121,16 @@ export const Keyboard = ({
         </Key>
       </div>
       <div className="flex justify-center">
-        <Key width={65.4} value="DELETE" onClick={onClick}>
+        <Key
+          width={65.4}
+          value="DELETE"
+          // onClick={onClick}
+          onMouseDown={onStartDelete}
+          onMouseUp={onEndDelete}
+        >
           {DELETE_TEXT}
         </Key>
-        {['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((key) => (
+        {keyboardList[locale][2].map((key) => (
           <Key
             value={key}
             key={key}
@@ -104,5 +144,5 @@ export const Keyboard = ({
         </Key>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -57,5 +57,6 @@ export const Hungarian: Messages = {
   Victory: "Győzelem",
   Guesses: "Találgatások",
   GuessesFlags: "",
-  Daily: "",
+  Daily: "Napi",
+  NextDailyIn: "Következő naponta {time}"
 };

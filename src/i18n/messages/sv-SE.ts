@@ -57,5 +57,6 @@ export const Swedish: Messages = {
   Victory: "Seger",
   Guesses: "Gissningar",
   GuessesFlags: "",
-  Daily: "",
+  Daily: "Daglig",
+  NextDailyIn: "Nästa dagligen i {time}"
 };

@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { GlobeMethods } from 'react-globe.gl';
+import { endOfToday, differenceInMilliseconds } from 'date-fns'
 import Globe from './components/Globe'
 import { Navbar } from './components/Navbar';
 import InputField from './components/InputField'
@@ -10,7 +11,7 @@ import StatisticModal from './components/modal/StatisticModal';
 import { Guesses } from "./lib/localStorage";
 import { useLocalStorage } from "./hooks/useLocalStorage"
 import { Stats } from './lib/localStorage'
-import { t_id } from './lib/answer'
+import { t_id, generateAnswer } from './lib/answer'
 
 type Props = {
   graphicData: [],
@@ -23,6 +24,7 @@ type Props = {
   setWin: Function;
   setRandCountry: Function;
   rand_country: number;
+  onGlobeStatisticClose: Function
 };
 
 const UI = ({
@@ -36,16 +38,12 @@ const UI = ({
   setWin,
   setRandCountry,
   rand_country,
+  onGlobeStatisticClose
 }: Props) => {
-
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
   const [msg, setMsg] = useState("Game3")
-
-  useEffect(() => {
-    console.log(msg);
-  }, [msg]);
 
   const prefersDarkMode = window.matchMedia(
     '(prefers-color-scheme: dark)'
@@ -179,30 +177,55 @@ const UI = ({
       }
   }
 
-  const loadGueses = useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  function newDaily() {
+    const r_country = generateAnswer()
 
     if (!isPractice) {
-      
-    var today = new Date().toLocaleDateString("en-CA");
-    if (localStorage.getItem('day')) {
-      if (localStorage.getItem('day') !== today) {
-        localStorage.removeItem('guesses');
-        storeGuesses({countries: []});
-        setPlaces([]);
-        var r = t_id;
-        localStorage.setItem('r_country', r+"");
-        localStorage.setItem('day', today);
-        setRandCountry(r);
-        return;
-      } else {
-        places = storedGuesses.countries;
-        var answ = setPlaces(places);
-        setMsg(answ);
+      localStorage.setItem('r_country', r_country + '')
 
-      }
+      storeGuesses({ countries: [] })
+      setPlaces([]);
+      setRandCountry(r_country);
+      setWin(false);
     }
-    
-    localStorage.setItem('day', today);
+  }
+
+  useEffect(() => {
+    var t: NodeJS.Timeout
+
+    if (!isPractice) {
+      const timeout = differenceInMilliseconds(endOfToday(), new Date())
+      t = setTimeout(newDaily, timeout)
+    }
+    return () => {
+      clearTimeout(t)
+    }
+  }, [newDaily, isPractice])
+
+  const loadGueses = useEffect(() => {
+    if (!isPractice) {
+      
+      var today = new Date().toLocaleDateString("en-CA");
+      if (localStorage.getItem('day')) {
+        if (localStorage.getItem('day') !== today) {
+          localStorage.removeItem('guesses');
+          storeGuesses({countries: []});
+          setPlaces([]);
+          var r = t_id;
+          localStorage.setItem('r_country', r+"");
+          localStorage.setItem('day', today);
+          setRandCountry(r);
+          return;
+        } else {
+          places = storedGuesses.countries;
+          var answ = setPlaces(places);
+          setMsg(answ);
+
+        }
+      }
+      
+      localStorage.setItem('day', today);
     } else {
       const rval = localStorage.getItem('pr_country');
       var r_country = Math.round(Math.random() * 196);
@@ -225,6 +248,11 @@ const UI = ({
 
   }
 
+  function playAgain() {
+    handlePractice(true);
+    setTimeout(() => newPractice(), 0);
+  }
+
   return (
     <div className="h-screen" onClick={() => { if (msg === "Game4" || msg === "Game3") setMsg("")}}>
       <Navbar
@@ -245,18 +273,21 @@ const UI = ({
         globeRef={globeRef}
         practiceMode={isPractice}
         win={win}
-        handlePractice={newPractice}
+        handlePractice={playAgain}
         r_country={rand_country}
         storedStats={storedStats}
         storeStats={storeStats}
         setIsStatsModalOpen={setIsStatsModalOpen}
         setMsg={setMsg}
+        onPlayAgain={playAgain}
+        onStatisticClose={onGlobeStatisticClose}
       />
       <InputField
         handleSubmit={handleSubmit}
         setMsg={[msg, setMsg]}
         isHints={isHints}
         countries={countries}
+        win={win}
       />
 
       <SettingsModal
@@ -281,10 +312,10 @@ const UI = ({
         setIsStatsModalOpen={setIsStatsModalOpen}
         storedStats={storedStats}
         win={false}
-        practiceMode={false}
+        practiceMode={isPractice}
         c_name={'Africa'}
         g_length={14}
-        handlerPractice={()=>{}}
+        handlerPractice={playAgain}
       />
       
     </div>

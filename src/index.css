@@ -203,3 +203,78 @@ body {
 .hide-list {
   grid-template-columns: repeat(auto-fill, 2rem);
 }
+
+/* --- */
+
+.dark .container {
+  color: #ffffff;
+}
+
+@media (max-width: 767px) {
+  .globle-h1 {
+    font-size: 34px !important;
+  }
+}
+
+.globle-h1 {
+    font-size: 38px !important;
+    font-weight: 700 !important;
+}
+
+.globle-h2 {
+  font-size: 19px !important;
+  font-weight: 400 !important;
+}
+
+.container {
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.mt-5 {
+  margin-top: 3rem !important;
+}
+
+@media (min-width: 576px) {
+  .container {
+      max-width: 540px;
+  }
+}
+
+.globle_step {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.number {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.globle_text {
+  text-align: left;
+  font-size: 18px;
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .section-title .title {
+      font-size: 24px !important;
+  }
+}
+
+.para-desc {
+  max-width: 600px;
+}
+
+@media (max-width: 768px) {
+  .section-title .title {
+      font-size: 24px !important;
+  }
+}
+
+.section-title .title {
+  letter-spacing: .5px;
+  font-size: 28px !important;
+}

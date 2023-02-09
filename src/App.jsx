@@ -2,7 +2,7 @@ import React from 'react';
 import UI from './UI';
 import { LocaleContext } from "./i18n/LocaleContext";
 import { langNameMap } from "./i18n/locales";
-import {t_id} from './lib/answer'
+import { t_id } from './lib/answer'
 
 const alternateNames = require('./data/alternate_names.json');
 
@@ -28,6 +28,7 @@ class App extends React.Component {
     this.setWin = this.setWin.bind(this);
     this.setRandCountry = this.setRandCountry.bind(this);
     this.getCountries = this.getCountries.bind(this);
+    this.centerCurrentCountry = this.centerCurrentCountry.bind(this);
 
     //document.documentElement.classList.add('dark');
   }
@@ -63,8 +64,8 @@ class App extends React.Component {
   }
 
   addPlace(place) {
-
     var countr = this.getFromName(place.toLowerCase());
+
     if (!place || (!countr && countr !== 0)) {
       return "Game5";
     }
@@ -75,20 +76,39 @@ class App extends React.Component {
       return "Game6";
     }
 
-    this.setState((state) => { return {places: [...state.places, counr_name] }});
-    this.setState({ angle: { lng: (this.state.countries[countr].bbox[0] + this.state.countries[countr].bbox[2]) / 2, lat: (this.state.countries[countr].bbox[1] + this.state.countries[countr].bbox[3]) / 2} });
+    this.setState((state) => ({
+      places: [...state.places, counr_name]
+    }));
+    this.setState({
+      angle: {
+        lng: (this.state.countries[countr].bbox[0] + this.state.countries[countr].bbox[2]) / 2,
+        lat: (this.state.countries[countr].bbox[1] + this.state.countries[countr].bbox[3]) / 2
+      }
+    });
     if (counr_name === 'Russia') {
       this.setState({ angle: { lng: 97, lat: 64 } });
     }
 
     if (this.state.rand_country === countr) {
       this.setState({ win: true });
-      this.setState((state) =>{ return { graphicData: {...state.graphicData, [counr_name]: 'rgba( 0, 255, 0, 1)'} } });
+      this.setState((state) => ({
+        graphicData:
+          {
+            ...state.graphicData,
+            [counr_name]: 'rgba( 0, 255, 0, 1)'
+          }
+      }));
       return "";
     }
 
     //console.log(this.state.countries[this.state.rand_country].properties.ADMIN);
-    this.setState((state) =>{ return { graphicData: {...state.graphicData, [counr_name]: this.getDistanceBetweenCountry(this.state.rand_country, place)} } });
+    this.setState((state) => ({
+      graphicData:
+        {
+          ...state.graphicData,
+          [counr_name]: this.getDistanceBetweenCountry(this.state.rand_country, place)
+        }
+    }));
 
     if (this.state.places.length === 0) {
       return "Game4";
@@ -109,7 +129,6 @@ class App extends React.Component {
   }
 
   getFromName(name) {
-
     const trimmedName = name
     .trim()
     .toLowerCase()
@@ -147,7 +166,6 @@ class App extends React.Component {
   }
 
   getDistanceBetweenCountry(c1, c2_name) {
-
     var c2 = this.getFromName(c2_name.toLowerCase());
 
     var ps1 = this.getPoints(c1);
@@ -219,21 +237,98 @@ class App extends React.Component {
     this.setState({rand_country: rc});
   }
 
+  centerCurrentCountry() {
+    const country_id = this.state.rand_country;
+    const country = this.state.countries[country_id];
+
+    this.setState({
+      angle: {
+        lng: (country.bbox[0] + country.bbox[2]) / 2,
+        lat: (country.bbox[1] + country.bbox[3]) / 2
+      }
+    });
+  }
+
   render() {
+    // #region DEBUG ONLY
+    const { countries, rand_country } = this.state
+    if (Array.isArray(countries)) {
+      console.log(countries[rand_country].properties.ADMIN)
+    }
+    // #endregion
+
     return (
       <div>
-        <UI
-          graphicData={this.state.graphicData}
-          angle={this.state.angle}
-          getCountries={this.getCountries}
-          places={this.state.places}
-          addPlace={this.addPlace}
-          setPlaces={this.setPlaces}
-          win={this.state.win}
-          setWin={this.setWin}
-          setRandCountry={this.setRandCountry}
-          rand_country={this.state.rand_country}
-        />
+        <div>
+          <UI
+            graphicData={this.state.graphicData}
+            angle={this.state.angle}
+            getCountries={this.getCountries}
+            places={this.state.places}
+            addPlace={this.addPlace}
+            setPlaces={this.setPlaces}
+            win={this.state.win}
+            setWin={this.setWin}
+            setRandCountry={this.setRandCountry}
+            rand_country={this.state.rand_country}
+            onGlobeStatisticClose={this.centerCurrentCountry}
+          />
+        </div>
+        <section className="bg-half" style={{textAlign: '-webkit-center', position: 'relative'}}>
+            <div className="container mt-5">
+                <div className="row justify-content-center">
+                    <div className="col-lg-8 col-md-8 text-center">
+                        <div>
+                            <h1 className="globle-h1">Globle Game</h1>
+                            <h2 className="globle-h2">Globle will test your knowledge of geography. You must find the Unknown Country on the world map. Just like in the game Hot and Cold, the temperature will show you how close you are to the correct guess. After each of your attempts, you will see on the map the country you have chosen. The hotter the color, the closer you are to the Unknown Land. You have unlimited guesses so use the color hints and find the target country as soon as possible.</h2>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </section>
+        <section className="bg-half" style={{textAlign: '-webkit-center', position: 'relative'}}>
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-lg-6 col-md-9">
+                        <div className="section-title" style={{ textAlign: 'left' }}>
+                            <h3 className="globle_head mb-4" style={{ textAlign: 'center', fontWeight: '600', fontSize: '26px' }}>How to play Globle?</h3>
+                            <div className="globle_step" style={{ display: 'flex' }}>
+                              <div className="number">1</div>
+                              <p className="globle_text" style={{ marginLeft: '24px' }}>Touch the globe icon to start playing. You will see a world map on your screen with no countries marked. Write your first guess in the box above the globe, then click the Submit button.</p>
+                            </div>
+                            <div className="globle_step" style={{ display: 'flex' }}>
+                              <div className="number">2</div>
+                              <p className="globle_text" style={{ marginLeft: '24px' }}>After submitting, you will see the outline of the selected country. The color will show you how close you are to the target country. If you see orange or red, well, you're pretty close. Pale color means that the target country is far from your choice.</p>
+                            </div>
+                            <div className="globle_step" style={{ display: 'flex' }}>
+                              <div className="number">3</div>
+                              <p className="globle_text" style={{ marginLeft: '24px' }}>Click, drag and move the globe to get a closer view of the map.</p>
+                            </div>
+                            <div className="globle_step" style={{ display: 'flex' }}>
+                              <div className="number">4</div>
+                              <p className="globle_text" style={{ marginLeft: '24px' }}>When you select the correct country, it will be colored in dark red.</p>
+                            </div>
+                            <div className="globle_step" style={{ display: 'flex' }}>
+                              <div className="number">5</div>
+                              <p className="globle_text" style={{ marginLeft: '24px' }}>In this game, your number of guesses is unlimited, so play with pleasure and improve your geographical skills!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section className="share_s mt-3" style={{position: 'relative'}}>
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-12 text-center">
+                        <div className="section-title" style={{ textAlign: 'center' }}>
+                            <h4 className="title mb-4">Did you like Globle Game?</h4>
+                            <p className="para-desc" style={{ fontSize: '18px', margin: 'auto' }}>Globle is another version of the famous Wordle puzzle. The difference between Globle is that it focuses on countries and their location on the world map. Globle is an interesting geography guessing game in which a new mysterious country is discovered every day. It bears some resemblance to the game Hot and Cold. The closer you are to the correct guess, the hotter the color. The further you are from a guess, the colder it is. Globle  is now played by over a million people daily. Globle is a great way to get some new knowledge of the world, even for geographic geniuses!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
       </div>
     )
   };

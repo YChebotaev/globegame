@@ -9,6 +9,7 @@ import { ChevronUpIcon } from '@heroicons/react/24/outline';
 //import { isMobile } from 'react-device-detect';
 import { useMediaQuery } from 'react-responsive';
 import localeList from "../i18n/messages";
+import { CircleFlag } from 'react-circle-flags'
 
 type Props = {
   guesses: string[];
@@ -173,11 +174,7 @@ export default function List({
                       onClick={(e) => turnToCountry(e, guess)}
                       className="flex cursor-pointer"
                     >
-                      <img
-                        src={`https://flagcdn.com/w20/${flag.toLowerCase()}.png`}
-                        alt={name}
-                        className="mt-1 w-6 py-1"
-                      />
+                      <CircleFlag cdnUrl="/flags/" countryCode={flag.toLowerCase()} height={20} className="w-6 py-1" />
 
                     </button>
                   </li>
@@ -243,11 +240,7 @@ export default function List({
                 onClick={(e) => turnToCountry(e, guess)}
                 className="flex cursor-pointer transp"
               >
-                <img
-                  src={`https://flagcdn.com/w20/${flag.toLowerCase()}.png`}
-                  alt={name}
-                  className="mt-1 w-6"
-                />
+                <CircleFlag cdnUrl="/flags/" countryCode={flag.toLowerCase()} height={20} className="w-6" />
                 <span className="ml-2 text-md text-left">{name}</span>
               </button>
             </li>
