@@ -1,5 +1,7 @@
 import ReactGlobe, { GlobeMethods } from "react-globe.gl";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useContext, useRef } from "react";
+import { langNameMap } from "../i18n/langNameMap";
+import { LocaleContext } from "../i18n/LocaleContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { Guesses, Stats } from "../lib/localStorage";
 import List from "./List";
@@ -25,6 +27,8 @@ type Props = {
   storeStats: Function;
   setIsStatsModalOpen: Function;
   setMsg: Function;
+  openWin: boolean;
+  setOpenWin(value: boolean): void;
   onPlayAgain: Function;
   onStatisticClose: Function;
 };
@@ -45,9 +49,12 @@ export default function Globe({
   storeStats,
   setIsStatsModalOpen,
   setMsg,
+  openWin,
+  setOpenWin,
   onPlayAgain,
   onStatisticClose,
 }: Props) {
+  const { locale } = useContext(LocaleContext);
   const today = new Date().toLocaleDateString("en-CA");
 
   const [storedGuesses, storeGuesses] = useLocalStorage<Guesses>("guesses", {
@@ -60,8 +67,6 @@ export default function Globe({
       countries: [],
     },
   );
-
-  const [openWin, setOpenWin] = useState(true);
 
   useEffect(() => {
     if (guesses.length > 0) {
@@ -76,22 +81,57 @@ export default function Globe({
 
   useEffect(() => {
     const controls: any = globeRef.current.controls();
+
     controls.autoRotate = true;
     controls.autoRotateSpeed = 1;
-    setTimeout(() => {
+
+    const t = setTimeout(() => {
       globeRef.current.pointOfView({ lat: 0, lng: 0, altitude: 2.5 });
     }, 400);
+
+    return () => {
+      clearTimeout(t);
+    };
   }, [globeRef]);
 
   const containerRef = useRef<HTMLDivElement>(null!);
   useEffect(() => {
     const controls: any = globeRef.current.controls();
-    containerRef.current.addEventListener("mouseup", () => {
+    const containerEl = containerRef.current;
+
+    const listener = () => {
       controls.autoRotate = false;
-    });
-    containerRef.current.addEventListener("touchend", () => {
-      controls.autoRotate = false;
-    });
+    };
+
+    containerEl.addEventListener("mouseup", listener, { passive: true });
+    containerEl.addEventListener("touchend", listener, { passive: true });
+
+    return () => {
+      containerEl.removeEventListener("mouseup", listener);
+      containerEl.removeEventListener("touchend", listener);
+    };
+  }, [globeRef]);
+
+  useEffect(() => {
+    const controls: any = globeRef.current.controls();
+
+    const blurListener = () => {
+      controls.enableRotate = false;
+
+      const focusListener = () => {
+        controls.enableRotate = true;
+
+        window.removeEventListener("focus", focusListener);
+      };
+
+      window.addEventListener("focus", focusListener, { passive: true });
+    };
+
+    window.addEventListener("blur", blurListener, { passive: true });
+
+    return () => {
+      window.removeEventListener("blur", blurListener);
+    };
   }, [globeRef]);
 
   useEffect(() => {
@@ -209,23 +249,31 @@ export default function Globe({
 
   return (
     <div style={{ width: `${size}px` }}>
-      <div className="gues" style={{ width: `${size}px`, marginTop: marTop }}>
-        {showStats ? (
-          <StatisticModal
-            isStatsModalOpen={openWin}
-            setIsStatsModalOpen={setOpenWin}
-            storedStats={storedStats}
-            win={true}
-            practiceMode={practiceMode}
-            c_name={countries.features[r_country].properties.ADMIN}
-            g_length={guesses.length}
-            handlerPractice={handlePractice}
-            onClose={onStatisticClose}
-          />
-        ) : (
-          ""
-        )}
+      {showStats && (
+        <StatisticModal
+          isStatsModalOpen={openWin}
+          setIsStatsModalOpen={setOpenWin}
+          storedStats={storedStats}
+          win={true}
+          practiceMode={practiceMode}
+          c_name={countries.features[r_country].properties.ADMIN}
+          g_length={guesses.length}
+          handlerPractice={handlePractice}
+          onClose={onStatisticClose}
+          createCountryInfoLink={() => {
+            const countryProps = countries.features[r_country].properties;
+            const localeCountryName = countryProps[langNameMap[locale]];
 
+            if (locale === "en-CA") {
+              return `${localeCountryName}`.toLowerCase();
+            } else {
+              return `${locale.slice(0, 2)}/${localeCountryName}`.toLowerCase();
+            }
+          }}
+        />
+      )}
+
+      <div className="gues" style={{ width: `${size}px`, marginTop: marTop }}>
         <div
           ref={containerRef}
           onClick={() => setMsg("")}
@@ -257,7 +305,7 @@ export default function Globe({
             />
           </div>
         )}
-        <NextDailyIn />
+        {win && !openWin && !practiceMode && <NextDailyIn />}
       </div>
       <List
         guesses={guesses}

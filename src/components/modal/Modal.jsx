@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./modal.css";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 
 const Modal = ({ active, setActive, children }) => {
+  useEffect(() => {
+    if (active) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.removeProperty('overflow');
+    }
+}, [active])
+
   return (
     <div
       className={

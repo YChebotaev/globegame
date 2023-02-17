@@ -1,15 +1,22 @@
 import classnames from "classnames";
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
+import { isMobile, isDesktop } from "react-device-detect";
+import { Locale } from "../../lib/locale";
 
 type Props = {
   children?: ReactNode;
   value: string;
+  disabled: boolean,
+  locale: Locale,
   width?: number;
   status?: string;
   onClick?: (value: string) => void;
   onMouseDown?(): void;
   onMouseUp?(): void;
+  onTouchStart?(): void,
+  onTouchEnd?(): void,
   isRevealing?: boolean;
+  style?: CSSProperties
 };
 
 export const Key = ({
@@ -17,10 +24,15 @@ export const Key = ({
   status,
   width = 40,
   value,
+  disabled,
+  locale,
   onClick,
   onMouseDown,
   onMouseUp,
+  onTouchStart,
+  onTouchEnd,
   isRevealing,
+  style,
 }: Props) => {
   const keyDelayMs = 350 * 6;
 
@@ -36,11 +48,15 @@ export const Key = ({
       'bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white':
         status === 'present',*/
     },
+    {
+      'h-10': locale === 'pl-PL'
+    }
   );
 
   const styles = {
     transitionDelay: isRevealing ? `${keyDelayMs}ms` : "unset",
     width: `${width}px`,
+    ...style
   };
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -55,9 +71,11 @@ export const Key = ({
       style={styles}
       aria-label={`${value}${status ? " " + status : ""}`}
       className={classes}
-      onClick={handleClick}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
+      onClick={disabled ? undefined : handleClick}
+      onTouchStart={isMobile ? (disabled ? undefined : onTouchStart) : undefined}
+      onTouchEnd={isMobile ? (disabled ? undefined : onTouchEnd) : undefined}
+      onMouseDown={isDesktop ? (disabled ? undefined : onMouseDown) : undefined}
+      onMouseUp={isDesktop ? (disabled ? undefined : onMouseUp) : undefined}
     >
       {children || value}
     </button>

@@ -52,13 +52,13 @@ export const Toggle = ({setActive, isActive}) => {
     return (
         <ToggleContainer>
             <ToggleBackground
-                onTap={toggleOn}
+                onClick={toggleOn}
                 style={{
                     background: isActive ? "rgb(74,222,128)" : "rgb(209,213,219)"
                 }}
             >
                 <ToggleCircle 
-                    onTap={toggleOn}
+                    onClick={toggleOn}
                     animate={{
                         //x: toggleDirection
                         x: isActive ? 20 : 0

@@ -3,13 +3,10 @@ import Modal from "./Modal.jsx";
 
 import { LocaleContext } from "../../i18n/LocaleContext";
 import localeList from "../../i18n/messages";
-// import { isMobile } from "react-device-detect";
-// import { isFirefox } from "react-device-detect";
 import { Stats } from "../../lib/localStorage";
-import useClipboard from '../../hooks/useClipboard'
+import useClipboard from "../../hooks/useClipboard";
 
 import { ShareIcon } from "@heroicons/react/24/outline";
-import Fade from "./Fade";
 
 type Props = {
   isStatsModalOpen: boolean;
@@ -21,6 +18,7 @@ type Props = {
   g_length: number;
   handlerPractice: Function;
   onClose?: Function;
+  createCountryInfoLink?(): string;
 };
 
 const StatisticModal = ({
@@ -32,7 +30,8 @@ const StatisticModal = ({
   c_name,
   g_length,
   handlerPractice,
-  onClose
+  onClose,
+  createCountryInfoLink: propsCreateCountryInfoLink,
 }: Props) => {
   const { locale } = useContext(LocaleContext);
   const today = new Date().toLocaleDateString("en-CA");
@@ -46,21 +45,31 @@ const StatisticModal = ({
   const avgGuesses = Math.round((sumGuesses / usedGuesses.length) * 100) / 100;
   const showAvgGuesses = usedGuesses.length === 0 ? "--" : avgGuesses;
 
-  const { copyToClipboard, renderMsg } = useClipboard({ storedStats })
+  const { copyToClipboard, renderMsg } = useClipboard({ storedStats });
 
   function handleClose(value: boolean) {
-    setIsStatsModalOpen(value)
+    setIsStatsModalOpen(value);
 
-    if (typeof onClose === 'function') {
-      onClose()
+    if (typeof onClose === "function") {
+      onClose();
+    }
+  }
+
+  function createCountryInfoLink() {
+    if (typeof propsCreateCountryInfoLink === "function") {
+      return propsCreateCountryInfoLink();
+    } else {
+      return "#";
     }
   }
 
   return (
     <Modal active={isStatsModalOpen} setActive={handleClose}>
-      {win ? (
-        <div>
-          <p className="text-center text-lg">{localeList[locale]["Victory"]}</p>
+      {win && (
+        <div className="mb-5">
+          <p className="text-center text-xl font-bold">
+            {localeList[locale]["Victory"]}
+          </p>
           <p className="text-center">
             {localeList[locale]["Game7"].replace("{answer}", c_name)}
           </p>
@@ -69,9 +78,10 @@ const StatisticModal = ({
               " " +
               (!practiceMode ? todaysGuesses : g_length)}
           </p>
+          <p className="text-center underline">
+            <a href={createCountryInfoLink()}>{localeList[locale]["Learn"]}</a>
+          </p>
         </div>
-      ) : (
-        ""
       )}
 
       <h2 className="modal-text">{localeList[locale]["StatsTitle"]}</h2>
@@ -122,14 +132,20 @@ const StatisticModal = ({
           className="bg-indigo-600 mt-2 inline-flex w-32 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-center font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-white sm:text-sm"
           onClick={copyToClipboard}
         >
-          <ShareIcon className="mr h-6 w-6 dark:stroke-white grow transp" />
+          <div>
+            <ShareIcon
+              className="mr h-5 w-5 dark:stroke-white grow transp"
+              width="24px"
+              height="24px"
+            />
+          </div>
           {localeList[locale]["Stats9"]}
         </button>
 
         {win ? (
           <button
             type="button"
-            className="bg-indigo-600 mt-2 inline-flex w-32 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-center font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-white sm:text-sm whitespace-nowrap"
+            className="bg-indigo-600 mt-2 inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-center font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-white sm:text-sm whitespace-nowrap"
             onClick={() => handlerPractice(true)}
           >
             {localeList[locale]["PlayAgain"]}

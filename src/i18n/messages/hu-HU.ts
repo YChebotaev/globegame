@@ -37,8 +37,8 @@ export const Hungarian: Messages = {
   SettingsTitle: "Beállítások",
   Settings1: "Napi téma",
   Settings2: "Éjszakai téma",
-  Settings3: "Színvak mód Be",
-  Settings4: "Színvak mód Ki",
+  Settings3: "Színvak mód",
+  Settings4: "Színvak mód",
   Settings5: "Országok",
   Settings7: "Nyelv",
   Settings9: "Szabad mód",
@@ -56,7 +56,8 @@ export const Hungarian: Messages = {
   Clipboard: "🌍🌍🌍\nA mai Globle rejtett országát {X} találgatásban sejtettem\nMeg tudod csinálni jobban?\nhttps://globlegame.org/\n#globle\n🌍🌍🌍",
   Victory: "Győzelem",
   Guesses: "Találgatások",
-  GuessesFlags: "",
+  GuessesFlags: "A tippjeid itt lesznek",
   Daily: "Napi",
-  NextDailyIn: "Következő naponta {time}"
+  NextDailyIn: "Következő naponta {time}",
+  Learn: "Ismerje meg ezt az országot"
 };

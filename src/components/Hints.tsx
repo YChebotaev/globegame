@@ -1,12 +1,19 @@
 import { useState, useEffect, RefObject } from "react";
+import cn from "classnames";
 
 type Props = {
   formRef: RefObject<HTMLFormElement>;
   hints: string[];
+  currentSelected: number;
   onClickHint(value: string): void;
 };
 
-export default function Hints({ formRef, hints, onClickHint }: Props) {
+export default function Hints({
+  formRef,
+  hints,
+  currentSelected,
+  onClickHint,
+}: Props) {
   const [styles, setStyles] = useState({});
 
   useEffect(() => {
@@ -18,11 +25,23 @@ export default function Hints({ formRef, hints, onClickHint }: Props) {
 
     setStyles({
       bottom: `${window.innerHeight - formRect.bottom + formRect.height}px`,
-      height: `${hints.length * 40}px`,
+      height: `${hints.length * 24}px`,
     });
   }, [formRef, hints]);
 
-  if (hints.length === 0) return null
+  useEffect(() => {
+    if (hints.length === 0) {
+      document.body.style.removeProperty("overflow");
+    } else {
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.removeProperty("overflow");
+    };
+  }, [hints]);
+
+  if (hints.length === 0) return null;
 
   return (
     <div
@@ -30,15 +49,18 @@ export default function Hints({ formRef, hints, onClickHint }: Props) {
         position: "fixed",
         left: 0,
         width: "100%",
-        maxHeight: (40 * 3) + 'px',
-        overflow: 'hidden',
-        overflowY: 'scroll',
+        maxHeight: 24 * 3 + "px",
+        overflow: "hidden",
+        overflowY: "scroll",
         ...styles,
       }}
     >
       {hints.map((value, i) => (
         <div
-          className="font-bold text-4xl text-blue-300 select-none text-center"
+          className={cn(
+            "font-bold select-none text-center text-blue-300",
+            i === currentSelected && "text-blue-400",
+          )}
           key={i}
           onClick={() => onClickHint(value)}
         >

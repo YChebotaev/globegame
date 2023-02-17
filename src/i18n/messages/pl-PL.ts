@@ -37,8 +37,8 @@ export const Polish: Messages = {
   SettingsTitle: "Ustawienia",
   Settings1: "Motyw dnia",
   Settings2: "Motyw nocny",
-  Settings3: "Tryb daltonizmu włączony",
-  Settings4: "Tryb daltonizmu wyłączony",
+  Settings3: "Tryb daltonizmu",
+  Settings4: "Tryb daltonizmu",
   Settings5: "Kraje",
   Settings7: "Język",
   Settings9: "Tryb darmowy",
@@ -56,7 +56,8 @@ export const Polish: Messages = {
   Clipboard: "🌍🌍🌍\nOdgadłem ukryty kraj w dzisiejszym Globle w {X} domysłach\nCzy możesz zrobić to lepiej?\nhttps://globlegame.org/\n#globle\n🌍🌍🌍",
   Victory: "Zwycięstwo",
   Guesses: "Zgadywania",
-  GuessesFlags: "",
+  GuessesFlags: "Twoje domysły będą tutaj",
   Daily: "Codziennie",
-  NextDailyIn: "Następny codziennie w {time}"
+  NextDailyIn: "Następny Codziennie {time}",
+  Learn: "Dowiedz się więcej o tym kraju"
 };

@@ -44,6 +44,7 @@ const UI = ({
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
   const [msg, setMsg] = useState("Game3")
+  const [openWin, setOpenWin] = useState(true);
 
   const prefersDarkMode = window.matchMedia(
     '(prefers-color-scheme: dark)'
@@ -279,6 +280,8 @@ const UI = ({
         storeStats={storeStats}
         setIsStatsModalOpen={setIsStatsModalOpen}
         setMsg={setMsg}
+        openWin={openWin}
+        setOpenWin={setOpenWin}
         onPlayAgain={playAgain}
         onStatisticClose={onGlobeStatisticClose}
       />
@@ -287,7 +290,8 @@ const UI = ({
         setMsg={[msg, setMsg]}
         isHints={isHints}
         countries={countries}
-        win={win}
+        openWin={openWin}
+        disabled={win && !isPractice}
       />
 
       <SettingsModal

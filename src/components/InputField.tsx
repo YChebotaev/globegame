@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, useMemo } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { FormattedMessage } from "react-intl";
 
 import { LocaleContext } from "../i18n/LocaleContext";
@@ -6,13 +6,15 @@ import { LocaleContext } from "../i18n/LocaleContext";
 import { Keyboard } from "./keyboard/Keyboard";
 import Fade from "./modal/Fade";
 import Hints from "./Hints";
+import useHints from "../hooks/useHints";
 
 type Props = {
   handleSubmit: (value: string) => string;
   setMsg: (string | any)[];
   isHints: boolean;
   countries: { features: never[] };
-  win: boolean;
+  openWin: boolean;
+  disabled: boolean;
 };
 
 const InputField = ({
@@ -20,30 +22,21 @@ const InputField = ({
   setMsg,
   isHints,
   countries,
-  win,
+  openWin,
+  disabled,
 }: Props) => {
-  const today = new Date().toLocaleDateString("en-CA");
   const { locale } = useContext(LocaleContext);
   const [value, setValue] = useState("");
-
   const [show, setShow] = useState(true);
 
   const formRef = useRef<HTMLFormElement>(null);
-  const hints = useMemo(() => {
-    const hints: string[] = [];
 
-    if (isHints && value !== "") {
-      for (let { properties } of countries.features) {
-        const name = Reflect.get(properties, "ADMIN") as string;
-
-        if (name.toLowerCase().startsWith(value.toLowerCase())) {
-          hints.push(name);
-        }
-      }
-    }
-
-    return hints;
-  }, [value, countries.features, isHints]);
+  const { hints, currentSelected } = useHints({
+    isHints,
+    value,
+    locale,
+    countries,
+  });
 
   function exSubmit(e: any) {
     e.preventDefault();
@@ -59,14 +52,25 @@ const InputField = ({
 
   function onEnter() {
     setShow(true);
-    let answ = handleSubmit(value);
-    if (answ == "" || answ == "Game4") {
+
+    let v = value
+
+    if (currentSelected !== -1) {
+      v = hints[currentSelected]
+    }
+
+    let answ = handleSubmit(v);
+
+    if (answ === "" || answ === "Game4") {
       setValue("");
     }
+
     setMsg[1](answ);
+
     if (answ === "Game4" || answ === "Game3") {
       return;
     }
+
     setTimeout(() => setShow(false), 3000);
   }
 
@@ -113,7 +117,7 @@ const InputField = ({
 
   return (
     <div>
-      {setMsg[0] !== "" && !win ? (
+      {setMsg[0] !== "" && !openWin ? (
         <Fade
           show={show}
           extdiv="absolute z-9 top-48 w-full px-1 left-1/2 -translate-x-2/4"
@@ -144,10 +148,15 @@ const InputField = ({
 
       <div className="absolute bottom-1 w-full">
         {isHints && (
-          <Hints formRef={formRef} hints={hints} onClickHint={onClickHint} />
+          <Hints
+            currentSelected={currentSelected}
+            formRef={formRef}
+            hints={hints}
+            onClickHint={onClickHint}
+          />
         )}
 
-        <form
+        {!disabled && <form
           ref={formRef}
           className="mx-auto table relative bottom-1"
           onSubmit={(e) => exSubmit(e)}
@@ -158,7 +167,7 @@ const InputField = ({
           <span className="input cursor relative bottom-1" style={divStyle}>
             |
           </span>
-        </form>
+        </form>}
 
         <Keyboard
           locale={locale}
@@ -167,6 +176,7 @@ const InputField = ({
           onEnter={onEnter}
           onSpace={onSpace}
           isRevealing={false}
+          disabled={disabled}
         />
       </div>
     </div>

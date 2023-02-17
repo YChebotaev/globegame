@@ -37,8 +37,8 @@ export const Spanish: Messages = {
   SettingsTitle: "Ajustes",
   Settings1: "Tema del día",
   Settings2: "Tema de la noche",
-  Settings3: "Modo daltónico activado",
-  Settings4: "Modo daltónico desactivado",
+  Settings3: "Modo daltónico",
+  Settings4: "Modo daltónico",
   Settings5: "Países",
   Settings7: "Idioma",
   Settings9: "Modo libre",
@@ -56,7 +56,8 @@ export const Spanish: Messages = {
   Clipboard: "🌍🌍🌍\nAdiviné el país oculto en Globle de hoy en {X} intentos\n¿Puedes hacerlo mejor?\nhttps://globlegame.org/\n#globle\n🌍🌍🌍",
   Victory: "Victoria",
   Guesses: "Suposiciones",
-  GuessesFlags: "",
+  GuessesFlags: "Tus conjeturas estarán aquí",
   Daily: "Diario",
-  NextDailyIn: "Siguiente Entrada diaria {time}"
+  NextDailyIn: "Siguiente Diario {time}",
+  Learn: "Aprende sobre este país"
 };

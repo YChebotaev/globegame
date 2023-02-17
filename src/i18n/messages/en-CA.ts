@@ -37,8 +37,8 @@ export const English: Messages = {
   SettingsTitle: "Settings",
   Settings1: "Day Theme",
   Settings2: "Night Theme",
-  Settings3: "Colour Blind Mode On",
-  Settings4: "Colour Blind Mode Off",
+  Settings3: "Colour Blind Mode",
+  Settings4: "Colour Blind Mode",
   Settings5: "Countries",
   Settings7: "Language",
   Settings9: "Practice",
@@ -58,5 +58,6 @@ export const English: Messages = {
   Guesses: "Guesses",
   GuessesFlags: "Your guesses will be here",
   Daily: "Daily",
-  NextDailyIn: "Next Daily in {time}"
+  NextDailyIn: "Next Daily in {time}",
+  Learn: "Learn more about this country"
 };

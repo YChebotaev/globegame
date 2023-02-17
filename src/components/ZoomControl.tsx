@@ -53,34 +53,8 @@ export default function ZoomControl ({ globeRef }: Props) {
 
           animate(
             altitude,
-            altitude - 1,
-            0.1,
-            'backward',
-            altitude => {
-              globeRef.current.pointOfView({
-                lat,
-                lng,
-                altitude
-              })
-            }
-          )
-        }}
-      >
-        <PlusIcon />
-      </button>
-      <button
-        style={{
-          width: 30,
-          height: 30,
-          color: '#ffffff'
-        }}
-        onClick={() => {
-          const { lat, lng, altitude } = globeRef.current.pointOfView()
-
-          animate(
-            altitude,
-            altitude + 1,
-            0.1,
+            altitude + 0.25,
+            0.01,
             'forward',
             altitude => {
               globeRef.current.pointOfView({
@@ -93,6 +67,32 @@ export default function ZoomControl ({ globeRef }: Props) {
         }}
       >
         <MinusIcon />
+      </button>
+      <button
+        style={{
+          width: 30,
+          height: 30,
+          color: '#ffffff'
+        }}
+        onClick={() => {
+          const { lat, lng, altitude } = globeRef.current.pointOfView()
+
+          animate(
+            altitude,
+            altitude - 0.25,
+            0.01,
+            'backward',
+            altitude => {
+              globeRef.current.pointOfView({
+                lat,
+                lng,
+                altitude
+              })
+            }
+          )
+        }}
+      >
+        <PlusIcon />
       </button>
     </div>
   )

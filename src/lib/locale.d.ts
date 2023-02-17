@@ -68,6 +68,7 @@ export type Messages = {
   GuessesFlags: string;
   Daily: string;
   NextDailyIn: string;
+  Learn: string;
 };
 
 export type LocaleMessages = Record<Locale, Messages>;

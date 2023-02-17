@@ -37,8 +37,8 @@ export const German: Messages = {
   SettingsTitle: "Einstellungen",
   Settings1: "Tag Theme",
   Settings2: "Nacht Theme",
-  Settings3: "Farbenfehlsichtigkeitsmodus On",
-  Settings4: "Farbenfehlsichtigkeitsmodus Off",
+  Settings3: "Kontrastfarben",
+  Settings4: "Kontrastfarben",
   Settings5: "Länder",
   Settings7: "Sprache",
   Settings9: "Freier Modus",
@@ -56,7 +56,8 @@ export const German: Messages = {
   Clipboard: "🌍🌍🌍\nIch habe das verborgene Land im heutigen Globle in {X} Versuchen erraten.\nKannst du es besser?\nhttps://globlegame.org/\n#globle\n🌍🌍🌍",
   Victory: "Sieg",
   Guesses: "Vermutungen",
-  GuessesFlags: "",
+  GuessesFlags: "Ihre Vermutungen",
   Daily: "Täglich",
-  NextDailyIn: "Nächster Tag in {time}"
+  NextDailyIn: "Nächstes Spiel {time}",
+  Learn: "Lernen Sie dieses Land kennen"
 };

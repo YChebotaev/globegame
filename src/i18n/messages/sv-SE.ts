@@ -37,8 +37,8 @@ export const Swedish: Messages = {
   SettingsTitle: "inställningar",
   Settings1: "Dagens tema",
   Settings2: "Natt tema",
-  Settings3: "Färgblindläge på",
-  Settings4: "Färgblindläge Av",
+  Settings3: "Färgblindläge",
+  Settings4: "Färgblindläge",
   Settings5: "Länder",
   Settings7: "Språk",
   Settings9: "Fritt läge",
@@ -56,7 +56,8 @@ export const Swedish: Messages = {
   Clipboard: "🌍🌍🌍\nJag gissade det dolda landet i dagens Globle på {X} gissningar\nKan du göra det bättre?\nhttps://globlegame.org/\n#globle\n🌍🌍🌍",
   Victory: "Seger",
   Guesses: "Gissningar",
-  GuessesFlags: "",
+  GuessesFlags: "Dina gissningar är här",
   Daily: "Daglig",
-  NextDailyIn: "Nästa dagligen i {time}"
+  NextDailyIn: "Nästa dagligen i {time}",
+  Learn: "Lär dig mer om detta land"
 };
