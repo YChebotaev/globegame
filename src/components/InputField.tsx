@@ -120,7 +120,7 @@ const InputField = ({
   };
 
   return (
-    <div>
+    <>
       {setMsg[0] !== "" && !openWin ? (
         <Fade
           show={show}
@@ -150,7 +150,7 @@ const InputField = ({
         ""
       )}
 
-      <div ref={keyboardRef} className="absolute bottom-1 w-full">
+      <div ref={keyboardRef} className="w-full">
         {isHints && hints.length > 0 && (
           <Hints
             currentSelected={currentSelected}
@@ -184,7 +184,7 @@ const InputField = ({
           isDarkMode={isDarkMode}
         />
       </div>
-    </div>
+    </>
   );
 };
 

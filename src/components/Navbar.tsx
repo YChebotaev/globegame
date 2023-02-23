@@ -67,15 +67,13 @@ export const Navbar = ({
           />
         </div>
 
-        <div className="content_center absolute w-full -z-10">
-          {isMobile2 ? (
+        {isMobile2 && (
+          <div className="content_center absolute w-full -z-10">
             <p className="text-center dark:text-white text-xl font-bold">
               Globle
             </p>
-          ) : (
-            ""
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="right-icons flex mr-1">
           <InformationCircleIcon

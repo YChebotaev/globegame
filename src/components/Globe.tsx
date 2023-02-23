@@ -38,6 +38,7 @@ type Props = {
   onPlayAgain: Function;
   onStatisticClose: Function;
   guesRef: RefObject<HTMLDivElement>;
+  showWinInfo: boolean;
 };
 
 export default function Globe({
@@ -61,6 +62,7 @@ export default function Globe({
   onPlayAgain,
   onStatisticClose,
   guesRef,
+  showWinInfo,
 }: Props) {
   const { locale } = useContext(LocaleContext);
   const today = new Date().toLocaleDateString("en-CA");
@@ -256,7 +258,13 @@ export default function Globe({
     ((win && practiceMode) || (!practiceMode && storedStats.lastWin === today));
 
   return (
-    <div style={{ width: `${size}px` }}>
+    <div
+      className="m-auto grow-1"
+      style={{
+        width: `${size}px`,
+        height: `${size + (showWinInfo ? 110 : 0)}px`,
+      }}
+    >
       {showStats && (
         <StatisticModal
           isStatsModalOpen={openWin}
@@ -308,7 +316,7 @@ export default function Globe({
         </div>
 
         {isMobile && <ZoomControl globeRef={globeRef} />}
-        {win && !openWin && (
+        {showWinInfo && (
           <div style={{ margin: "10px auto" }}>
             <WinInfo
               countryName={countries.features[r_country].properties.ADMIN}
