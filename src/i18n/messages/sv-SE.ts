@@ -58,6 +58,6 @@ export const Swedish: Messages = {
   Guesses: "Gissningar",
   GuessesFlags: "Dina gissningar är här",
   Daily: "Daglig",
-  NextDailyIn: "Nästa dagligen i {time}",
+  NextDailyIn: "Nästa dagligen i",
   Learn: "Lär dig mer om detta land"
 };

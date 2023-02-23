@@ -6,7 +6,7 @@ import localeList from "../../i18n/messages";
 import { Stats } from "../../lib/localStorage";
 import useClipboard from "../../hooks/useClipboard";
 
-import { ShareIcon } from "@heroicons/react/24/outline";
+import { ShareIcon } from "@heroicons/react/outline";
 
 type Props = {
   isStatsModalOpen: boolean;
@@ -129,7 +129,7 @@ const StatisticModal = ({
       <div className="flex space-x-2 justify-center">
         <button
           type="button"
-          className="bg-indigo-600 mt-2 inline-flex w-32 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-center font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-white sm:text-sm"
+          className="bg-indigo-600 mt-2 inline-flex w-32 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-center font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-white sm:text-sm whitespace-nowrap"
           onClick={copyToClipboard}
         >
           <div>

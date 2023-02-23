@@ -9,7 +9,7 @@ import {
   ChartBarIcon,
   CogIcon,
   InformationCircleIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/outline";
 
 type Props = {
   setIsInfoModalOpen: (value: boolean) => void;
@@ -82,21 +82,21 @@ export const Navbar = ({
             stroke="currentColor"
             className="mx-2 h-6 w-6 stroke-white grow"
             viewBox="0 0 24 24"
-            strokeWidth="1"
+            strokeWidth="2"
             onClick={() => setIsInfoModalOpen(true)}
           />
           <ChartBarIcon
             stroke="currentColor"
             className="mr h-6 w-6 stroke-white grow"
             viewBox="0 0 24 24"
-            strokeWidth="1"
+            strokeWidth="2"
             onClick={() => setIsStatsModalOpen(true)}
           />
           <CogIcon
             stroke="currentColor"
             className="h-6 w-6 stroke-white grow"
             viewBox="0 0 24 24"
-            strokeWidth="1"
+            strokeWidth="2"
             onClick={() => setIsSettingsModalOpen(true)}
           />
         </div>

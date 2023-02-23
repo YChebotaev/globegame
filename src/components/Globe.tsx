@@ -1,5 +1,11 @@
 import ReactGlobe, { GlobeMethods } from "react-globe.gl";
-import React, { useEffect, useContext, useRef } from "react";
+import {
+  useEffect,
+  useContext,
+  useRef,
+  MutableRefObject,
+  RefObject,
+} from "react";
 import { langNameMap } from "../i18n/langNameMap";
 import { LocaleContext } from "../i18n/LocaleContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
@@ -18,7 +24,7 @@ type Props = {
   countries: { features: any[] };
   angle: { lat: 60; lng: 60; altitude: 2.5 };
   guesses: string[];
-  globeRef: React.MutableRefObject<GlobeMethods>;
+  globeRef: MutableRefObject<GlobeMethods>;
   practiceMode: boolean;
   win: boolean;
   handlePractice: Function;
@@ -31,6 +37,7 @@ type Props = {
   setOpenWin(value: boolean): void;
   onPlayAgain: Function;
   onStatisticClose: Function;
+  guesRef: RefObject<HTMLDivElement>;
 };
 
 export default function Globe({
@@ -53,6 +60,7 @@ export default function Globe({
   setOpenWin,
   onPlayAgain,
   onStatisticClose,
+  guesRef,
 }: Props) {
   const { locale } = useContext(LocaleContext);
   const today = new Date().toLocaleDateString("en-CA");
@@ -273,7 +281,11 @@ export default function Globe({
         />
       )}
 
-      <div className="gues" style={{ width: `${size}px`, marginTop: marTop }}>
+      <div
+        ref={guesRef}
+        className="gues"
+        style={{ width: `${size}px`, marginTop: marTop }}
+      >
         <div
           ref={containerRef}
           onClick={() => setMsg("")}

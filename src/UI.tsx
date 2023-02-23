@@ -12,6 +12,7 @@ import { Guesses } from "./lib/localStorage";
 import { useLocalStorage } from "./hooks/useLocalStorage"
 import { Stats } from './lib/localStorage'
 import { t_id, generateAnswer } from './lib/answer'
+import useKeyboardLock from './hooks/useKeyboardLock';
 
 type Props = {
   graphicData: [],
@@ -45,6 +46,7 @@ const UI = ({
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
   const [msg, setMsg] = useState("Game3")
   const [openWin, setOpenWin] = useState(true);
+  const { keyboardRef, guesRef } = useKeyboardLock()
 
   const prefersDarkMode = window.matchMedia(
     '(prefers-color-scheme: dark)'
@@ -284,6 +286,7 @@ const UI = ({
         setOpenWin={setOpenWin}
         onPlayAgain={playAgain}
         onStatisticClose={onGlobeStatisticClose}
+        guesRef={guesRef}
       />
       <InputField
         handleSubmit={handleSubmit}
@@ -292,6 +295,8 @@ const UI = ({
         countries={countries}
         openWin={openWin}
         disabled={win && !isPractice}
+        isDarkMode={isDarkMode}
+        keyboardRef={keyboardRef}
       />
 
       <SettingsModal

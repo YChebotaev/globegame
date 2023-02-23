@@ -58,6 +58,6 @@ export const Italian: Messages = {
   Guesses: "Indovina",
   GuessesFlags: "Le tue ipotesi saranno qui",
   Daily: "Quotidiano",
-  NextDailyIn: "Il prossimo gioco {time}",
+  NextDailyIn: "Il prossimo gioco",
   Learn: "Scopri questo paese"
 };

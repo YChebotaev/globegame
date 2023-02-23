@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, RefObject } from "react";
 import { FormattedMessage } from "react-intl";
 
 import { LocaleContext } from "../i18n/LocaleContext";
@@ -15,6 +15,8 @@ type Props = {
   countries: { features: never[] };
   openWin: boolean;
   disabled: boolean;
+  isDarkMode: boolean;
+  keyboardRef: RefObject<HTMLDivElement>
 };
 
 const InputField = ({
@@ -24,6 +26,8 @@ const InputField = ({
   countries,
   openWin,
   disabled,
+  isDarkMode,
+  keyboardRef
 }: Props) => {
   const { locale } = useContext(LocaleContext);
   const [value, setValue] = useState("");
@@ -146,8 +150,8 @@ const InputField = ({
         ""
       )}
 
-      <div className="absolute bottom-1 w-full">
-        {isHints && (
+      <div ref={keyboardRef} className="absolute bottom-1 w-full">
+        {isHints && hints.length > 0 && (
           <Hints
             currentSelected={currentSelected}
             formRef={formRef}
@@ -177,6 +181,7 @@ const InputField = ({
           onSpace={onSpace}
           isRevealing={false}
           disabled={disabled}
+          isDarkMode={isDarkMode}
         />
       </div>
     </div>

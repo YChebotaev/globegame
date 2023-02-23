@@ -21,40 +21,27 @@ export default function Hints({
 
     if (formEl == null) return;
 
-    const formRect = formEl.getBoundingClientRect();
+    const recalculateStyles = () => {
+      const formRect = formEl.getBoundingClientRect();
 
-    setStyles({
-      bottom: `${window.innerHeight - formRect.bottom + formRect.height}px`,
-      height: `${hints.length * 24}px`,
-    });
-  }, [formRef, hints]);
+      setStyles({
+        bottom: `${window.innerHeight - formRect.bottom + formRect.height}px`,
+        height: `${hints.length * 24}px`,
+      });
+    };
+    const scrollListener = () => recalculateStyles();
 
-  useEffect(() => {
-    if (hints.length === 0) {
-      document.body.style.removeProperty("overflow");
-    } else {
-      document.body.style.overflow = "hidden";
-    }
+    recalculateStyles();
+
+    window.addEventListener("scroll", scrollListener, { passive: true });
 
     return () => {
-      document.body.style.removeProperty("overflow");
+      window.removeEventListener("scroll", scrollListener);
     };
-  }, [hints]);
-
-  if (hints.length === 0) return null;
+  }, [formRef, hints]);
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        left: 0,
-        width: "100%",
-        maxHeight: 24 * 3 + "px",
-        overflow: "hidden",
-        overflowY: "scroll",
-        ...styles,
-      }}
-    >
+    <div className="fixed left-0 w-full" style={styles}>
       {hints.map((value, i) => (
         <div
           className={cn(

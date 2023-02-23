@@ -20,12 +20,12 @@ export default function useHints({
   const hints = useMemo(() => {
     const hints: string[] = [];
 
-    if (isHints && value !== "") {
+    if (isHints && lowercasedValue !== "") {
       for (let { properties } of countries.features) {
         const langName = langNameMap[locale];
         const name = Reflect.get(properties, langName ?? "ADMIN") as string;
         const postalName = Reflect.get(properties, "POSTAL") as string
-        const abbrevName = (Reflect.get(properties, "POSTAL") as string).replace(/\./g, '');
+        const abbrevName = (Reflect.get(properties, "ABBREV") as string).replace(/\./g, '');
 
         if (
           name.toLowerCase().startsWith(lowercasedValue)
@@ -38,7 +38,7 @@ export default function useHints({
     }
 
     return hints;
-  }, [value, locale, countries.features, isHints]);
+  }, [lowercasedValue, locale, countries.features, isHints]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -49,7 +49,7 @@ export default function useHints({
           setCurrentSelected((currentSelected) => {
             const nextSelected = currentSelected - 1
 
-            if (nextSelected === -1) {
+            if (nextSelected <= -1) {
               return hints.length - 1
             } else {
               return nextSelected

@@ -58,6 +58,6 @@ export const Polish: Messages = {
   Guesses: "Zgadywania",
   GuessesFlags: "Twoje domysły będą tutaj",
   Daily: "Codziennie",
-  NextDailyIn: "Następny Codziennie {time}",
+  NextDailyIn: "Następny Codziennie",
   Learn: "Dowiedz się więcej o tym kraju"
 };

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./modal.css";
-import { XCircleIcon } from "@heroicons/react/24/outline";
+import { XCircleIcon } from "@heroicons/react/outline";
 
 const Modal = ({ active, setActive, children }) => {
   useEffect(() => {

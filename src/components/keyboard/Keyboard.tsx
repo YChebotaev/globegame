@@ -1,15 +1,11 @@
 import { useEffect, useRef } from "react";
-import { BackspaceIcon } from "@heroicons/react/24/outline";
+import { BackspaceIcon } from "@heroicons/react/outline";
 import SpaceIcon from "../icons/SpaceIcon";
 import EnterIcon from "../icons/EnterIcon";
 import keyboardList from "../../i18n/keyboards";
 
 import { Key } from "./Key";
 import { Locale } from "../../lib/locale";
-
-const DELETE_TEXT = <BackspaceIcon width={48} />;
-const ENTER_TEXT = <EnterIcon />;
-const SPACE_TEXT = <SpaceIcon />;
 
 type Props = {
   locale: Locale;
@@ -18,7 +14,8 @@ type Props = {
   onEnter: () => void;
   onSpace: () => void;
   isRevealing?: boolean;
-  disabled: boolean
+  disabled: boolean;
+  isDarkMode: boolean;
 };
 
 export const Keyboard = ({
@@ -28,8 +25,12 @@ export const Keyboard = ({
   onEnter,
   onSpace,
   isRevealing,
-  disabled
+  disabled,
+  isDarkMode,
 }: Props) => {
+  const DELETE_TEXT = <BackspaceIcon width={32} />;
+  const ENTER_TEXT = <EnterIcon isDarkMode={isDarkMode} />;
+  const SPACE_TEXT = <SpaceIcon isDarkMode={isDarkMode} />;
   const deleteIntervalRef = useRef<NodeJS.Timer>();
   const onClick = (value: string) => {
     if (value === "ENTER") {
@@ -144,7 +145,7 @@ export const Keyboard = ({
           locale={locale}
           width={65.4}
           value="Space"
-          style={{ padding: 10 }}
+          style={{ padding: 15 }}
           disabled={disabled}
           onClick={onClick}
         >
@@ -156,7 +157,7 @@ export const Keyboard = ({
           locale={locale}
           width={65.4}
           value="DELETE"
-          style={{ padding: 10 }}
+          style={{ padding: 15 }}
           disabled={disabled}
           onTouchStart={onStartDelete}
           onTouchEnd={onEndDelete}
@@ -180,7 +181,7 @@ export const Keyboard = ({
           locale={locale}
           width={65.4}
           value="ENTER"
-          style={{ padding: 10 }}
+          style={{ padding: 15 }}
           disabled={disabled}
           onClick={onClick}
         >

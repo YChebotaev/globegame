@@ -8,8 +8,7 @@ import React, {
 import { GlobeMethods } from "react-globe.gl";
 import { FormattedMessage } from "react-intl";
 import { LocaleContext } from "../i18n/LocaleContext";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { ChevronUpIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline";
 //import { isMobile } from 'react-device-detect';
 import { useMediaQuery } from "react-responsive";
 import localeList from "../i18n/messages";

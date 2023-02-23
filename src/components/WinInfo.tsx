@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ShareIcon } from "@heroicons/react/24/outline";
+import { ShareIcon } from "@heroicons/react/outline";
 import localeList from "../i18n/messages";
 import { LocaleContext } from "../i18n/LocaleContext";
 import { Stats } from "../lib/localStorage";
