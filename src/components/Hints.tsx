@@ -46,7 +46,7 @@ export default function Hints({
         <div
           className={cn(
             "font-bold select-none text-center text-blue-300",
-            i === currentSelected && "text-blue-400",
+            i === currentSelected && "text-blue-500",
           )}
           key={i}
           onClick={() => onClickHint(value)}

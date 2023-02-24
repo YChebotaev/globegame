@@ -37,7 +37,6 @@ type Props = {
   setOpenWin(value: boolean): void;
   onPlayAgain: Function;
   onStatisticClose: Function;
-  guesRef: RefObject<HTMLDivElement>;
   showWinInfo: boolean;
 };
 
@@ -61,7 +60,6 @@ export default function Globe({
   setOpenWin,
   onPlayAgain,
   onStatisticClose,
-  guesRef,
   showWinInfo,
 }: Props) {
   const { locale } = useContext(LocaleContext);
@@ -123,28 +121,6 @@ export default function Globe({
   }, [globeRef]);
 
   useEffect(() => {
-    const controls: any = globeRef.current.controls();
-
-    const blurListener = () => {
-      controls.enableRotate = false;
-
-      const focusListener = () => {
-        controls.enableRotate = true;
-
-        window.removeEventListener("focus", focusListener);
-      };
-
-      window.addEventListener("focus", focusListener, { passive: true });
-    };
-
-    window.addEventListener("blur", blurListener, { passive: true });
-
-    return () => {
-      window.removeEventListener("blur", blurListener);
-    };
-  }, [globeRef]);
-
-  useEffect(() => {
     if (win && storedStats.lastWin !== today && !practiceMode) {
       const lastWin = today;
       const gamesWon = storedStats.gamesWon + 1;
@@ -168,8 +144,9 @@ export default function Globe({
       };
 
       storeStats(newStats);
+
+      setTimeout(() => setOpenWin(true), 1500);
     }
-    setTimeout(() => setOpenWin(true), 1500);
   }, [win, guesses, storeStats, storedStats, practiceMode]);
 
   function polygonColor(obj: any) {
@@ -246,7 +223,7 @@ export default function Globe({
 
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
   const size = isMobile ? 320 : 420;
-  const marTop = isMobile ? "14vh" : "0px";
+  // const marTop = isMobile ? "14vh" : "0px";
 
   const extraStyle = {
     width: `${size}px`,
@@ -290,9 +267,8 @@ export default function Globe({
       )}
 
       <div
-        ref={guesRef}
         className="gues"
-        style={{ width: `${size}px`, marginTop: marTop }}
+        style={{ width: `${size}px` /*, marginTop: marTop */ }}
       >
         <div
           ref={containerRef}

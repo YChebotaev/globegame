@@ -11,7 +11,6 @@ import { Guesses } from "./lib/localStorage";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { Stats } from "./lib/localStorage";
 import { t_id, generateAnswer } from "./lib/answer";
-import useKeyboardLock from "./hooks/useKeyboardLock";
 
 type Props = {
   graphicData: [];
@@ -44,9 +43,12 @@ const UI = ({
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [msg, setMsg] = useState("Game3");
-  const [openWin, setOpenWin] = useState(true);
-  const { keyboardRef, guesRef } = useKeyboardLock();
-  const showWinInfo = win && !openWin
+  const [openWin, setOpenWin] = useState(win);
+  const showWinInfo = win && !openWin;
+
+  useEffect(() => {
+    setOpenWin(win);
+  }, [win]);
 
   const prefersDarkMode = window.matchMedia(
     "(prefers-color-scheme: dark)",
@@ -298,7 +300,6 @@ const UI = ({
           setOpenWin={setOpenWin}
           onPlayAgain={playAgain}
           onStatisticClose={onGlobeStatisticClose}
-          guesRef={guesRef}
           showWinInfo={showWinInfo}
         />
         <InputField
@@ -309,7 +310,6 @@ const UI = ({
           openWin={openWin}
           disabled={win && !isPractice}
           isDarkMode={isDarkMode}
-          keyboardRef={keyboardRef}
         />
 
         {isSettingsModalOpen && (

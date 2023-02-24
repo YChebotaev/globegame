@@ -5,8 +5,9 @@ import App from './App';
 import LocaleProvider from "./i18n";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
-    <LocaleProvider>
-        <App />
-    </LocaleProvider>
+  <LocaleProvider>
+    <App />
+  </LocaleProvider>
 );

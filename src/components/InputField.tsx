@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, RefObject } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { FormattedMessage } from "react-intl";
 
 import { LocaleContext } from "../i18n/LocaleContext";
@@ -16,7 +16,6 @@ type Props = {
   openWin: boolean;
   disabled: boolean;
   isDarkMode: boolean;
-  keyboardRef: RefObject<HTMLDivElement>
 };
 
 const InputField = ({
@@ -27,14 +26,11 @@ const InputField = ({
   openWin,
   disabled,
   isDarkMode,
-  keyboardRef
 }: Props) => {
   const { locale } = useContext(LocaleContext);
   const [value, setValue] = useState("");
   const [show, setShow] = useState(true);
-
   const formRef = useRef<HTMLFormElement>(null);
-
   const { hints, currentSelected } = useHints({
     isHints,
     value,
@@ -57,10 +53,10 @@ const InputField = ({
   function onEnter() {
     setShow(true);
 
-    let v = value
+    let v = value;
 
     if (currentSelected !== -1) {
-      v = hints[currentSelected]
+      v = hints[currentSelected];
     }
 
     let answ = handleSubmit(v);
@@ -121,7 +117,7 @@ const InputField = ({
 
   return (
     <>
-      {setMsg[0] !== "" && !openWin ? (
+      {setMsg[0] !== "" && !openWin && (
         <Fade
           show={show}
           extdiv="absolute z-9 top-48 w-full px-1 left-1/2 -translate-x-2/4"
@@ -146,11 +142,9 @@ const InputField = ({
             />
           </p>
         </Fade>
-      ) : (
-        ""
       )}
 
-      <div ref={keyboardRef} className="w-full">
+      <div className="w-full">
         {isHints && hints.length > 0 && (
           <Hints
             currentSelected={currentSelected}
@@ -160,18 +154,20 @@ const InputField = ({
           />
         )}
 
-        {!disabled && <form
-          ref={formRef}
-          className="mx-auto table relative bottom-1"
-          onSubmit={(e) => exSubmit(e)}
-        >
-          <span className="input" style={divStyle}>
-            {value}
-          </span>
-          <span className="input cursor relative bottom-1" style={divStyle}>
-            |
-          </span>
-        </form>}
+        {!disabled && (
+          <form
+            ref={formRef}
+            className="mx-auto table relative bottom-1"
+            onSubmit={(e) => exSubmit(e)}
+          >
+            <span className="input" style={divStyle}>
+              {value}
+            </span>
+            <span className="input cursor relative bottom-1" style={divStyle}>
+              |
+            </span>
+          </form>
+        )}
 
         <Keyboard
           locale={locale}
