@@ -308,6 +308,7 @@ const UI = ({
           isHints={isHints}
           countries={countries}
           openWin={openWin}
+          win={win}
           disabled={win && !isPractice}
           isDarkMode={isDarkMode}
         />

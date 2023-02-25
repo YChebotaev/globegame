@@ -1,11 +1,5 @@
 import ReactGlobe, { GlobeMethods } from "react-globe.gl";
-import {
-  useEffect,
-  useContext,
-  useRef,
-  MutableRefObject,
-  RefObject,
-} from "react";
+import { useEffect, useContext, useRef, MutableRefObject } from "react";
 import { langNameMap } from "../i18n/langNameMap";
 import { LocaleContext } from "../i18n/LocaleContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";

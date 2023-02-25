@@ -16,6 +16,7 @@ type Props = {
   openWin: boolean;
   disabled: boolean;
   isDarkMode: boolean;
+  win: boolean;
 };
 
 const InputField = ({
@@ -26,6 +27,7 @@ const InputField = ({
   openWin,
   disabled,
   isDarkMode,
+  win,
 }: Props) => {
   const { locale } = useContext(LocaleContext);
   const [value, setValue] = useState("");
@@ -117,7 +119,7 @@ const InputField = ({
 
   return (
     <>
-      {setMsg[0] !== "" && !openWin && (
+      {setMsg[0] !== "" && !openWin && !win && (
         <Fade
           show={show}
           extdiv="absolute z-9 top-48 w-full px-1 left-1/2 -translate-x-2/4"

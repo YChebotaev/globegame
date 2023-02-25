@@ -28,7 +28,7 @@ export default function WinInfo({
         <div className="flex align-center justify-center gap-2">
           <button
             type="button"
-            className="bg-indigo-600 mt-2 inline-flex w-32 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-center font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-white sm:text-sm"
+            className="bg-indigo-600 mt-2 inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-center font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-white sm:text-sm whitespace-nowrap"
             onClick={copyToClipboard}
           >
             <ShareIcon className="mr h-6 w-6 dark:stroke-white grow transp" />

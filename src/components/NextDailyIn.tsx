@@ -34,7 +34,7 @@ export default function NextDailyIn() {
   return (
     <div
       className="absolute bg-sky-100 dark:bg-slate-900 drop-shadow-xl w-fit inset-x-0 py-2 px-2 rounded-lg space-y-2 mx-auto select-none"
-      style={{ top: 120, width: 250, borderRadius: 30 }}
+      style={{ top: 150, width: 250, borderRadius: 30 }}
     >
       <p className="text-sm font-bold text-center text-gray-500 dark:text-gray-300">
         {localeList[locale]["NextDailyIn"]}
