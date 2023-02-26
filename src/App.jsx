@@ -251,10 +251,10 @@ class App extends React.Component {
 
   render() {
     // #region DEBUG ONLY
-    const { countries, rand_country } = this.state
-    if (Array.isArray(countries)) {
-      console.log(countries[rand_country].properties.ADMIN)
-    }
+    // const { countries, rand_country } = this.state
+    // if (Array.isArray(countries) && countries[rand_country]) {
+    //   console.log(countries[rand_country].properties.ADMIN)
+    // }
     // #endregion
 
     return (
